@@ -1,0 +1,97 @@
+default_language_version:
+  python: python3.13
+
+repos:
+- repo: meta
+  hooks:
+  - id: check-useless-excludes                        # ensures that exclude directives apply to any file in the repository.
+  - id: identity                                      # a simple hook which prints all arguments passed to it, useful for debugging.
+
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.9.6     # https://github.com/astral-sh/ruff/releases
+  hooks:
+    # Run the linter.
+  - id: ruff
+    args: [--fix]
+    # Run the formatter.
+  - id: ruff-format
+
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0     # https://github.com/pre-commit/pre-commit-hooks/releases
+  hooks:
+  - id: check-added-large-files                     # prevents giant files from being committed.
+  - id: check-ast                                   # simply checks whether the files parse as valid python.
+  - id: check-builtin-literals                      # requires literal syntax when initializing empty or zero python builtin types.
+  - id: check-case-conflict                         # checks for files that would conflict in case-insensitive filesystems.
+  - id: check-docstring-first                       # checks a common error of defining a docstring after code.
+  - id: check-executables-have-shebangs             # ensures that (non-binary) executables have a shebang.
+  - id: check-illegal-windows-names                 # checks for files that cannot be created on Windows.
+  - id: check-json                                  # checks json files for parseable syntax.
+  - id: check-merge-conflict                        # checks for files that contain merge conflict strings.
+  - id: check-shebang-scripts-are-executable        # ensures that (non-binary) files with a shebang are executable.
+  - id: check-symlinks                              # checks for symlinks which do not point to anything.
+  - id: check-toml                                  # checks toml files for parseable syntax.
+  - id: check-vcs-permalinks                        # ensures that links to vcs websites are permalinks.
+  - id: check-xml                                   # checks xml files for parseable syntax.
+  - id: check-yaml                                  # checks yaml files for parseable syntax.
+    args: [--allow-multiple-documents]
+  - id: debug-statements                            # checks for debugger imports and py37+ `breakpoint()` calls in python source.
+  - id: destroyed-symlinks                          # detects symlinks which are changed to regular files with a content of a path which that symlink was pointing to.
+  - id: detect-aws-credentials                      # detects *your* aws credentials from the aws cli credentials file.
+    args: [--allow-missing-credentials]
+  - id: detect-private-key                          # detects the presence of private keys.
+  - id: end-of-file-fixer                           # ensures that a file is either empty, or ends with one newline.
+    exclude: workloads/biller-review-client/public/.*
+  # - id: double-quote-string-fixer                   # replaces double quoted strings with single quoted strings.
+  - id: fix-byte-order-marker                       # removes utf-8 byte order marker.
+  - id: forbid-new-submodules                       # prevents addition of new git submodules.
+  - id: forbid-submodules                           # forbids any submodules in the repository
+  - id: mixed-line-ending                           # replaces or checks mixed line ending.
+  - id: name-tests-test                             # verifies that test files are named correctly.
+  # - id: no-commit-to-branch                         # don't commit to branch
+  - id: pretty-format-json                          # sets a standard for formatting json files.
+    args: [--autofix, --indent=4]
+  - id: requirements-txt-fixer                      # sorts entries in requirements.txt.
+  - id: sort-simple-yaml                            # sorts simple yaml files which consist only of top-level keys, preserving comments and blocks.
+  - id: trailing-whitespace                         # trims trailing whitespace.
+
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.14.0     # https://github.com/macisamuele/language-formatters-pre-commit-hooks/tags
+  hooks:
+  - id: pretty-format-toml
+    args: [--autofix, --indent=4, --trailing-commas]
+    exclude: .*/pyproject\.toml
+  - id: pretty-format-yaml
+    args: [--autofix, --indent=2]
+
+- repo: https://github.com/pre-commit/pygrep-hooks
+  rev: v1.10.0     # https://github.com/pre-commit/pygrep-hooks/tags
+  hooks:
+  - id: python-check-blanket-noqa                   # Enforce that `noqa` annotations always occur with specific codes. Sample annotations: `# noqa: F401`, `# noqa: F401,W203`
+  - id: python-check-blanket-type-ignore            # Enforce that `# type: ignore` annotations always occur with specific codes. Sample annotations: `# type: ignore[attr-defined]`, `# type: ignore[attr-defined, name-defined]`
+  - id: python-check-mock-methods                   # Prevent common mistakes of `assert mck.not_called()`, `assert mck.called_once_with(...)` and `mck.assert_called`.
+  - id: python-no-eval                              # A quick check for the `eval()` built-in function
+  - id: python-no-log-warn                          # A quick check for the deprecated `.warn()` method of python loggers
+  - id: python-use-type-annotations                 # Enforce that python3.6+ type annotations are used instead of type comments
+  - id: text-unicode-replacement-char               # Forbid files which have a UTF-8 Unicode replacement character
+
+
+- repo: https://github.com/tox-dev/pyproject-fmt
+  rev: v2.5.0   # Use the sha / tag you want to point at
+  hooks:
+  - id: pyproject-fmt
+
+
+- repo: https://github.com/northisup/pyright-pretty
+  rev: 505f74a71f62bf34e158045990bfe2ff77bdab41
+  hooks:
+  - id: pyright-pretty
+    name: Python type checking [coding-agent]
+    files: workloads/coding-agent/.*
+    args: [--project=./workloads/coding-agent/]
+  - id: pyright-pretty
+    name: Python type checking [notebooks]
+    files: notebooks/notebooks/.*
+    args: [--project=./notebooks/notebooks/]

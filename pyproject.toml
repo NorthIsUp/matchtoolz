@@ -1,0 +1,19 @@
+[build-system]
+build-backend = "hatchling.build"
+
+requires = [ "hatchling" ]
+
+[project]
+name = "matchtoolz"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [ { name = "Adam Hitchcock", email = "adam@northisup.com" } ]
+requires-python = ">=3.13"
+classifiers = [ "Programming Language :: Python :: 3 :: Only", "Programming Language :: Python :: 3.13" ]
+dependencies = [  ]
+
+scripts.matchtoolz = "matchtoolz:main"
+
+[dependency-groups]
+dev = [ "pytest>=8.3.4" ]
